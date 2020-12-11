@@ -1,15 +1,8 @@
 @extends('layouts.admin')
 @section('content')
-@can('permission_create')
-    <div class="block my-4">
-        <a class="btn-md btn-green" href="{{ route('admin.permissions.create') }}">
-            {{ trans('global.add') }} {{ trans('cruds.permission.title_singular') }}
-        </a>
-    </div>
-@endcan
 <div class="main-card">
     <div class="header">
-        {{ trans('cruds.permission.title_singular') }} {{ trans('global.list') }}
+        {{ trans('cruds.customers.title_singular') }} {{ trans('global.list') }}
     </div>
 
     <div class="body">
@@ -21,10 +14,16 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.permission.fields.id') }}
+                            {{ trans('cruds.customers.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.permission.fields.title') }}
+                            {{ trans('cruds.customers.fields.name') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.customers.fields.email') }}
+                        </th>
+                        <th>
+                            {{ trans('cruds.customers.fields.quiz_score') }}
                         </th>
                         <th>
                             &nbsp;
@@ -32,32 +31,38 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($permissions as $key => $permission)
-                        <tr data-entry-id="{{ $permission->id }}">
+                    @foreach($customers as $key => $customer)
+                        <tr data-entry-id="{{ $customer->id }}">
                             <td>
 
                             </td>
                             <td>
-                                {{ $permission->id ?? '' }}
+                                {{ $customer->id ?? '' }}
                             </td>
                             <td>
-                                {{ $permission->title ?? '' }}
+                                {{ $customer->name ?? '' }}
                             </td>
                             <td>
-                                @can('permission_show')
-                                    <a class="btn-sm btn-indigo" href="{{ route('admin.permissions.show', $permission->id) }}">
+                                {{ $customer->email ?? '' }}
+                            </td>
+                            <td>
+                                {{ $customer->quiz_score ?? '0' }}
+                            </td>
+                            <td>
+                                @can('customer_show')
+                                    <a class="btn-sm btn-indigo" href="{{ route('admin.customers.show', $customer->id) }}">
                                         {{ trans('global.view') }}
                                     </a>
                                 @endcan
 
-                                @can('permission_edit')
-                                    <a class="btn-sm btn-blue" href="{{ route('admin.permissions.edit', $permission->id) }}">
+                                @can('customer_edit')
+                                    <a class="btn-sm btn-blue" href="{{ route('admin.customers.edit', $customer->id) }}">
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
 
-                                @can('permission_delete')
-                                    <form action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                @can('customer_delete')
+                                    <form action="{{ route('admin.customers.destroy', $customer->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="submit" class="btn-sm btn-red" value="{{ trans('global.delete') }}">
@@ -82,11 +87,11 @@
 <script>
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('permission_delete')
+@can('customer_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('admin.permissions.massDestroy') }}",
+    url: "{{ route('admin.customers.massDestroy') }}",
     className: 'btn-red',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
@@ -117,7 +122,7 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  let table = $('.datatable-Permission:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  let table = $('.datatable-Customer:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();

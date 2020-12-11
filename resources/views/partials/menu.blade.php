@@ -56,13 +56,13 @@
                 </div>
             </div>
         @endcan
-        @can('project_access')
-            <a class="nav-link{{ request()->is('admin/projects*') ? ' active' : '' }}" href="{{ route('admin.projects.index') }}">
+        @can('customer_access')
+            <a class="nav-link{{ request()->is('admin/customers*') ? ' active' : '' }}" href="{{ route('admin.customers.index') }}">
                 <i class="fa-fw fas fa-project-diagram">
 
                 </i>
 
-                <span class="mx-4">{{ trans('cruds.project.title') }}</span>
+                <span class="mx-4">{{ trans('cruds.customers.title') }}</span>
             </a>
         @endcan
         @can('folder_access')

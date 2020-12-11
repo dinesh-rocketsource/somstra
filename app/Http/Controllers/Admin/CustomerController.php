@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Gate;
+use App\Models\Customer;
 
-class OrderController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +16,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $customers = Customer::all();
+        return view('admin.customers.index', compact('customers'));
     }
 
     /**
