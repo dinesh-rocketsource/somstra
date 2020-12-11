@@ -76,7 +76,7 @@ return [
             'email'                    => 'Email',
             'email_helper'             => '',
             'quiz_score'               => 'Sleep Quiz Score',
-            'email_verified_at_helper' => '',
+            'quiz_score_helper' => '',
             'created_at'               => 'Created at',
             'created_at_helper'        => '',
             'updated_at'               => 'Updated at',
