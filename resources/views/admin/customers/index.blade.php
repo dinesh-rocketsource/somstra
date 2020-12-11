@@ -14,7 +14,7 @@
 
     <div class="body">
         <div class="w-full">
-            <table class="stripe hover bordered datatable datatable-Permission">
+            <table class="stripe hover bordered datatable datatable-Customer">
                 <thead>
                     <tr>
                         <th width="10">
