@@ -15,6 +15,11 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('shopify_order_id');
+            $table->string('docusign_approval')->default('0')->nullable();
+            $table->date('docusign_date_sign')->nullable();
+            $table->string('lab_retriever_customer_id')->nullable();
+            $table->string('device_id')->nullable();
             $table->timestamps();
         });
     }

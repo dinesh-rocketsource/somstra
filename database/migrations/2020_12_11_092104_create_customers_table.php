@@ -15,6 +15,10 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('shopify_customer_id')->nullable();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('quiz_score');
             $table->timestamps();
         });
     }
