@@ -98,7 +98,7 @@ class CustomerController extends Controller
 
         $validated = $request->validate([
             'name' => 'required',
-            'email' => 'required|unique:customers|email,'. $id,
+            'email' => 'required|unique:customers,email,'. $id,
             'quiz_score' => 'required',
         ]);
         $customer = Customer::find($id);
