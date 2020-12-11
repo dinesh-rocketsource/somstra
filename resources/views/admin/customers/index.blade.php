@@ -1,5 +1,12 @@
 @extends('layouts.admin')
 @section('content')
+@can('customer_create')
+    <div class="block my-4">
+        <a class="btn-md btn-green" href="{{ route('admin.customers.create') }}">
+            {{ trans('global.add') }} {{ trans('cruds.customers.title_singular') }}
+        </a>
+    </div>
+@endcan
 <div class="main-card">
     <div class="header">
         {{ trans('cruds.customers.title_singular') }} {{ trans('global.list') }}

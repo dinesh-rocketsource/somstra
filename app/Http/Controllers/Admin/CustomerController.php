@@ -29,7 +29,9 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        abort_if(Gate::denies('customer_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        return view('admin.customers.create');
     }
 
     /**
@@ -40,7 +42,21 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort_if(Gate::denies('customer_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:customers|email',
+            'quiz_score' => 'required',
+        ]);
+
+        $customer = new Customer;
+        $customer->name = $request->name;
+        $customer->email = $request->email;
+        $customer->quiz_score = $request->quiz_score;
+        $customer->save();
+
+        return redirect()->route('admin.customers.index');
     }
 
     /**
@@ -51,7 +67,9 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        abort_if(Gate::denies('customer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $customer = Customer::find($id);
+        return view('admin.customers.show', compact('customer'));
     }
 
     /**
@@ -62,7 +80,9 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
+        abort_if(Gate::denies('customer_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $customer = Customer::find($id);
+        return view('admin.customers.edit', compact('customer'));
     }
 
     /**
@@ -74,7 +94,22 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        abort_if(Gate::denies('customer_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:customers|email',
+            'quiz_score' => 'required',
+        ]);
+        $customer = Customer::find($id);
+        if ($customer) {
+            $customer->name = $request->name;
+            $customer->email = $request->email;
+            $customer->quiz_score = $request->quiz_score;
+            $customer->save();
+        }
+
+        return redirect()->route('admin.customers.index');
     }
 
     /**
@@ -85,6 +120,23 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        abort_if(Gate::denies('customer_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $customer = Customer::find($id);
+        if ($customer) {
+            $customer->delete();
+        }
+        return back();
+    }
+
+    public function massDestroy(Request $request)
+    {
+        abort_if(Gate::denies('customer_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $validated = $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:customers,id',
+        ]);
+        Customer::whereIn('id', request('ids'))->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
